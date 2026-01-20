@@ -6,7 +6,6 @@ const AuthContext = React.createContext();
 export const AuthProvider = (props) => {
   const [user, setUser] = useState(JSON.parse(sessionStorage.getItem("CravingUser")) || "");
   const [isLogin, setIsLogin] = useState(!!user);
-
   useEffect(() => {
     setIsLogin(!!user);
   }, [user]);
@@ -16,7 +15,6 @@ export const AuthProvider = (props) => {
     <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>
   );
 };
-
 export const useAuth = () => {
   return useContext(AuthContext);
 };
