@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import api from "../config/Api";
-import { useNavigate, Link, UNSAFE_DataWithResponseInit } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -125,7 +125,7 @@ const Register = () => {
                   onChange={handleChange}
                   className="accent-(--color-secondary)"
                 />
-                <span className="text-sm font-medium">Partner</span>
+                <span className="text-sm font-medium">Partner dashboard</span>
               </label>
 
               <label className="flex items-center gap-2 bg-(--color-background) border border-(--color-primary)/20 rounded-lg px-4 py-3 cursor-pointer hover:border-(--color-secondary)">
@@ -137,7 +137,7 @@ const Register = () => {
                   onChange={handleChange}
                   className="accent-(--color-secondary)"
                 />
-                <span className="text-sm font-medium">Customer</span>
+                <span className="text-sm font-medium">Customer dashboard</span>
               </label>
             </div>
 
@@ -252,5 +252,3 @@ const Register = () => {
 };
 
 export default Register;
-
-
