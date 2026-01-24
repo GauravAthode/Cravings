@@ -125,7 +125,7 @@ const Register = () => {
                   onChange={handleChange}
                   className="accent-(--color-secondary)"
                 />
-                <span className="text-sm font-medium">Partner dashboard</span>
+                <span className="text-sm font-medium">Delivery Partner</span>
               </label>
 
               <label className="flex items-center gap-2 bg-(--color-background) border border-(--color-primary)/20 rounded-lg px-4 py-3 cursor-pointer hover:border-(--color-secondary)">
@@ -137,7 +137,7 @@ const Register = () => {
                   onChange={handleChange}
                   className="accent-(--color-secondary)"
                 />
-                <span className="text-sm font-medium">Customer dashboard</span>
+                <span className="text-sm font-medium">Customer</span>
               </label>
             </div>
 
