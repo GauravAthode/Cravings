@@ -5,10 +5,10 @@ import {genToken} from "../utils/authToken.js";
 export const UserRegister = async (req, res, next) => {
   try {
     //accept data from Frontend
-    const { fullName, email, mobileNumber, password } = req.body;
+    const { fullName, email, mobileNumber, password, role } = req.body;
 
     //verify that all data exist
-    if (!fullName || !email || !mobileNumber || !password) {
+    if (!fullName || !email || !mobileNumber || !password||!role) {
       const error = new Error("All feilds required");
       error.statusCode = 400;
       return next(error);
@@ -32,6 +32,7 @@ export const UserRegister = async (req, res, next) => {
       email,
       mobileNumber,
       password: hashPassword,
+      role,
     });
 
     // send response to Frontend

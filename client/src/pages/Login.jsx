@@ -6,7 +6,7 @@ import api from "../config/Api";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-  const { setUser, setIsLogin } = useAuth();
+  const { setUser, setIsLogin, setRole } = useAuth();
 
   const navigate = useNavigate();
 
@@ -38,9 +38,32 @@ const Login = () => {
       toast.success(res.data.message);
       setUser(res.data.data);
       setIsLogin(true);
-      sessionStorage.setItem("CravingUser",JSON.stringify(res.data.data))
+      sessionStorage.setItem("CravingUser", JSON.stringify(res.data.data));
       handleClearForm();
-      navigate("/user-dashboard");
+      switch (res.data.data.role) {
+        case "manager": {
+          setRole("manager");
+          navigate("/resturant-dashboard");
+          break;
+        }
+        case "partner": {
+          setRole("partner");
+          navigate("/rider-dashboard");
+          break;
+        }
+        case "customer": {
+          setRole("customer");
+          navigate("/user-dashboard");
+          break;
+        }
+        case "admin": {
+          setRole("admin");
+          navigate("/admin-dashboard");
+          break;
+        }
+        default:
+          break;
+      }
     } catch (error) {
       console.log(error);
       toast.error(error?.response?.data?.message || "Unknown Error");

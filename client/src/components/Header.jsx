@@ -4,8 +4,32 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
-  const { user, isLogin } = useAuth();
+  const { user, isLogin,role } = useAuth();
   const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    switch (role) {
+      case "manager": {
+        navigate("/resturant-dashboard");
+        break;
+      }
+      case "partner": {
+        navigate("/rider-dashboard");
+        break;
+      }
+      case "customer": {
+        navigate("/user-dashboard");
+        break;
+      }
+      case "admin": {
+        navigate("/admin-dashboard");
+        break;
+      }
+      default:
+        break;
+    }
+  };
+  
 
   return (
     <header className="bg-(--color-primary) sticky top-0 z-50 shadow-md">
@@ -50,7 +74,7 @@ const Header = () => {
             {isLogin ? (
               <div
                 className="text-orange-500  hover:scale-110 cursor-pointer"
-                onClick={() => navigate("/user-dashboard")}
+                onClick={handleNavigate}
               >
                 {user.fullName}
               </div>
