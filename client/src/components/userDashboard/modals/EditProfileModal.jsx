@@ -4,7 +4,7 @@ import api from "../../../config/Api";
 import toast from "react-hot-toast";
 
 export const EditProfileModal = ({ onClose }) => {
-  const { user, setUser } = useAuth();
+  const { user, setUser, setIsLogin } = useAuth();
 
   const [formData, setFormData] = useState({
     fullName: user.fullName,
@@ -20,18 +20,22 @@ export const EditProfileModal = ({ onClose }) => {
       setUser(res.data.data);
       toast.success("Profile updated successfully");
       onClose();
+      setIsLogin(true);
     } catch (error) {
       toast.error("Update failed");
+    } finally {
+      onClose();
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl w-full max-w-xl shadow-2xl">
-
         <div className="flex justify-between items-center px-6 py-4 border-b">
           <h3 className="text-xl font-semibold">Edit Profile</h3>
-          <button onClick={onClose} className="text-2xl">✕</button>
+          <button onClick={onClose} className="text-2xl">
+            ✕
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
@@ -73,7 +77,6 @@ export const EditProfileModal = ({ onClose }) => {
             </button>
           </div>
         </form>
-
       </div>
     </div>
   );

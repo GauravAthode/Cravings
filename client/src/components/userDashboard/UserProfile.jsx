@@ -1,48 +1,89 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { EditProfileModal } from "./modals/EditProfileModal";
+import UserImage from "../../assets/userImage.jpg";
+import { FaCamera } from "react-icons/fa";
+import api from "../../config/Api";
+import toast from "react-hot-toast";
 
 const UserProfile = () => {
-  const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
   const { user } = useAuth();
+  const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
+  const [preview, setPreview] = useState("");
+  const [photo, setPhoto] = useState("");
+  const changePhoto = async () => {
+    const form_Data = new FormData();
+    form_Data.append("image", photo);
+    form_Data.append("imageURL", preview);
+    try {
+      const res = await api.patch("/user/changePhoto", form_Data);
 
-  return (
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Unknown Error");
+    }
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    const newPhotoURL = URL.createObjectURL(file);
+    //console.log(newPhotoURL);
+    setPreview(newPhotoURL);
+    setTimeout(() => {
+      setPhoto(file);
+      changePhoto();
+    }, 5000);
+  };
+
+   return (
     <>
-      <div className="max-w-5xl mx-auto bg-(--color-background) rounded-2xl shadow-xl p-10 space-y-8">
-        <h2 className="text-2xl font-semibold text-(--color-primary)">
-          User Profile
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-xl p-6 border border-(--color-primary)/10">
-            <p className="text-sm text-(--color-primary)/70 mb-1">Name</p>
-            <p className="text-lg font-medium ">
-              {user.fullName}
-            </p>
+      <div className="bg-(--color-primary)/10 rounded-lg shadow-md p-6 md:p-8 h-full">
+        <div className="flex justify-between border p-3 rounded-3xl items-center border-gray-300 bg-white">
+          <div className="flex gap-5 items-center">
+            <div className="relative">
+              <div className=" border rounded-full w-36 h-36 overflow-hidden">
+                <img
+                  src={preview || user.photo.url || UserImage}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute bottom-2 left-[75%] border bg-white p-2 rounded-full group flex gap-3">
+                <label
+                  htmlFor="imageUpload"
+                  className="text-(--color-primary) group-hover:text-(--color-secondary)"
+                >
+                  <FaCamera />
+                </label>
+                <input
+                  type="file"
+                  id="imageUpload"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="text-3xl text-(--color-primary) font-bold">
+                {user.fullName}
+              </div>
+              <div className="text-gray-600 text-lg font-semibold">
+                {user.email}
+              </div>
+              <div className="text-gray-600 text-lg font-semibold">
+                {user.mobileNumber}
+              </div>
+            </div>
           </div>
-
-          <div className="bg-white rounded-xl p-6 border border-(--color-primary)/10">
-            <p className="text-sm text-(--color-primary)/70 mb-1">Email</p>
-            <p className="text-lg font-medium break-all">
-              {user.email}
-            </p>
-          </div>
-
-          <div className="bg-white rounded-xl p-6 border border-(--color-primary)/10">
-            <p className="text-sm text-(--color-primary)/70 mb-1">Phone</p>
-            <p className="text-lg font-medium">
-              {user.mobileNumber}
-            </p>
-          </div>
-        </div>
-
-        <div className="flex justify-end">
-          <button
-            onClick={() => setIsEditProfileModalOpen(true)}
-            className="px-6 py-3 rounded-xl bg-(--color-secondary) text-white font-medium hover:opacity-90 transition"
-          >
-            Edit Profile
-          </button>
+          <div className="flex flex-col gap-2">
+            <button className="px-4 py-2 rounded bg-(--color-secondary) text-white">
+              Edit
+            </button>
+            <button className="px-4 py-2 rounded bg-(--color-secondary) text-white">
+              Reset
+            </button>
+            </div>
         </div>
       </div>
 
@@ -52,5 +93,4 @@ const UserProfile = () => {
     </>
   );
 };
-
 export default UserProfile;
