@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import api from "../../../config/Api";
 
-export const EditProfileModal = ({ onClose }) => {
+const EditProfileModal = ({ onClose }) => {
   const { user, setUser, setIsLogin } = useAuth();
   const [formData, setFormData] = useState({
     fullName: user.fullName,
@@ -110,3 +110,5 @@ export const EditProfileModal = ({ onClose }) => {
     </>
   );
 };
+
+export default EditProfileModal;
