@@ -19,6 +19,13 @@ const ForgetPasswordModal = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    if (formData.newPassword !== formData.cfNewPassword) {
+      toast.error("New Password and Confirm Password Must be Same");
+      setLoading(false);
+      return;
+    }
+
     try {
       console.log(formData);
       let res;

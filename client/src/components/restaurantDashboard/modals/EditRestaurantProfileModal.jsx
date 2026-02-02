@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import api from "../../../config/Api";
 
-const EditProfileModal = ({ onClose }) => {
+const EditRestaurantProfileModal = ({ onClose }) => {
   const { user, setUser, setIsLogin } = useAuth();
   const [formData, setFormData] = useState({
     fullName: user?.fullName || "",
@@ -13,7 +13,13 @@ const EditProfileModal = ({ onClose }) => {
     address: user?.address || "",
     city: user?.city || "",
     pin: user?.pin || "",
+    restaurantName: user?.restaurantName || "",
+    cuisine: user?.cuisine || "",
     documents: {
+      gst: user?.documents?.gst || "",
+      fssai: user?.documents?.fssai || "",
+      rc: user?.documents?.rc || "",
+      dl: user?.documents?.dl || "",
       uidai: user?.documents?.uidai || "",
       pan: user?.documents?.pan || "",
     },
@@ -61,6 +67,10 @@ const EditProfileModal = ({ onClose }) => {
       newErrors.pin = "PIN code must be 6 digits";
     }
 
+    if (!formData.restaurantName.trim()) {
+      newErrors.restaurantName = "Restaurant name is required";
+    }
+
     if (
       formData.documents.pan &&
       !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(formData.documents.pan)
@@ -85,7 +95,6 @@ const EditProfileModal = ({ onClose }) => {
       ...formData,
       [name]: value,
     });
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors({ ...errors, [name]: "" });
     }
@@ -99,7 +108,6 @@ const EditProfileModal = ({ onClose }) => {
         [field]: value,
       },
     });
-    // Clear error for this field
     if (errors[field]) {
       setErrors({ ...errors, [field]: "" });
     }
@@ -107,13 +115,7 @@ const EditProfileModal = ({ onClose }) => {
 
   const fetchLocation = (e) => {
     e.preventDefault();
-    console.log("fetchLocation");
     navigator.geolocation.getCurrentPosition((result) => {
-      console.log(
-        "Location Result:",
-        result.coords.latitude,
-        result.coords.longitude,
-      );
       setFormData({
         ...formData,
         geoLocation: {
@@ -162,7 +164,7 @@ const EditProfileModal = ({ onClose }) => {
         <div className="bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-lg shadow-lg">
           <div className="flex justify-between px-6 py-4 border-b border-gray-300 items-center sticky top-0 bg-white">
             <h2 className="text-xl font-semibold text-gray-800">
-              Edit Profile
+              Edit Restaurant Profile
             </h2>
             <button
               onClick={() => onClose()}
@@ -203,7 +205,7 @@ const EditProfileModal = ({ onClose }) => {
                     className={`w-full border rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                       errors.fullName ? "border-red-500" : "border-gray-300"
                     }`}
-                    placeholder="Enter your full name"
+                    placeholder="Enter manager name"
                   />
                   {errors.fullName && (
                     <p className="text-red-600 text-xs mt-1">
@@ -260,9 +262,9 @@ const EditProfileModal = ({ onClose }) => {
                     className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Select Gender</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
 
@@ -276,6 +278,49 @@ const EditProfileModal = ({ onClose }) => {
                     value={formData.dob}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Restaurant Information Section */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">
+                Restaurant Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Restaurant Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="restaurantName"
+                    value={formData.restaurantName}
+                    onChange={handleInputChange}
+                    className={`w-full border rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors.restaurantName ? "border-red-500" : "border-gray-300"
+                    }`}
+                    placeholder="Enter restaurant name"
+                  />
+                  {errors.restaurantName && (
+                    <p className="text-red-600 text-xs mt-1">
+                      {errors.restaurantName}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Cuisine Type
+                  </label>
+                  <input
+                    type="text"
+                    name="cuisine"
+                    value={formData.cuisine}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., Italian, Indian, Chinese"
                   />
                 </div>
               </div>
@@ -297,7 +342,7 @@ const EditProfileModal = ({ onClose }) => {
                     value={formData.address}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter your address"
+                    placeholder="Enter restaurant address"
                   />
                 </div>
 
@@ -352,22 +397,81 @@ const EditProfileModal = ({ onClose }) => {
                       formData.geoLocation.lon !== "N/A"
                         ? "✅"
                         : "❌"}
-                      {console.log(formData)}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Documents Section */}
+            {/* Business Documents Section */}
             <div>
               <h3 className="text-lg font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">
-                Documents
+                Business Documents
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Aadhaar (UIDAI)
+                    GST Certificate
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.documents.gst}
+                    onChange={(e) =>
+                      handleNestedChange("documents", "gst", e.target.value)
+                    }
+                    className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="GST number"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    FSSAI License
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.documents.fssai}
+                    onChange={(e) =>
+                      handleNestedChange("documents", "fssai", e.target.value)
+                    }
+                    className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="FSSAI registration number"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    RC (Vehicle Registration)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.documents.rc}
+                    onChange={(e) =>
+                      handleNestedChange("documents", "rc", e.target.value)
+                    }
+                    className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Registration certificate"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Driving License
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.documents.dl}
+                    onChange={(e) =>
+                      handleNestedChange("documents", "dl", e.target.value)
+                    }
+                    className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Driving license number"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    UIDAI (Aadhaar)
                   </label>
                   <input
                     type="text"
@@ -454,7 +558,7 @@ const EditProfileModal = ({ onClose }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    IFS Code
+                    IFSC Code
                   </label>
                   <input
                     type="text"
@@ -467,7 +571,7 @@ const EditProfileModal = ({ onClose }) => {
                       )
                     }
                     className="w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="IFS code"
+                    placeholder="IFSC code"
                   />
                 </div>
               </div>
@@ -504,4 +608,4 @@ const EditProfileModal = ({ onClose }) => {
   );
 };
 
-export default EditProfileModal;
+export default EditRestaurantProfileModal;
