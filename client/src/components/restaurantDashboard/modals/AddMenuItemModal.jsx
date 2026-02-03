@@ -9,10 +9,10 @@ const AddMenuItemModal = ({ onClose }) => {
     itemName: "",
     description: "",
     price: "",
-    category: "",
     cuisine: "",
     type: "",
     preparationTime: "",
+    servingSize: "",
     availability: true,
   });
 
@@ -33,7 +33,17 @@ const AddMenuItemModal = ({ onClose }) => {
   };
 
   const handleImageChange = (e) => {
-    // handle Files
+    const files = e.target.files;
+    const fileArray = Array.from(files);
+    // console.log(files);
+    // console.log(fileArray);
+    let temp = [];
+    fileArray.forEach((img) => {
+      let imgURL = URL.createObjectURL(img);
+      temp.push(imgURL);
+    });
+    setImagePreviews(temp.slice(0, 5));
+    setImages(fileArray.slice(0, 5));
   };
 
   const handleSubmit = async (e) => {
@@ -43,17 +53,49 @@ const AddMenuItemModal = ({ onClose }) => {
 
     try {
       const form_data = new FormData();
+      form_data.append("itemName", formData.itemName);
+      form_data.append("description", formData.description);
+      form_data.append("price", formData.price);
+      form_data.append("servingSize", formData.servingSize);
+      form_data.append("cuisine", formData.cuisine);
+      form_data.append("type", formData.type);
+      form_data.append("preparationTime", formData.preparationTime);
+      form_data.append("availability", formData.availability);
+      images.forEach((img) => {
+        form_data.append("itemImages", img);
+      });
+
       //trasnfer MenuData to formData
-      const res = await api.post("/menu/add", form_data);
+      const res = await api.post("/restaurant/addMenuItem", form_data);
       toast.success(res.data.message);
 
-      setTimeout(() => onClose(), 1500);
+      setTimeout(handleClose, 1500);
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || "Failed to add menu item");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleClose = () => {
+    setFormData({
+      itemName: "",
+      description: "",
+      price: "",
+      category: "",
+      cuisine: "",
+      type: "",
+      preparationTime: "",
+      availability: true,
+    });
+
+    setImagePreviews([]);
+    setImages([]);
+    setErrors("");
+    setLoading(false);
+
+    onClose();
   };
 
   return (
@@ -65,7 +107,7 @@ const AddMenuItemModal = ({ onClose }) => {
               Add Menu Item
             </h2>
             <button
-              onClick={() => onClose()}
+              onClick={handleClose}
               className="text-gray-600 hover:text-red-600 text-2xl transition"
             >
               ⊗
@@ -78,14 +120,45 @@ const AddMenuItemModal = ({ onClose }) => {
               <h3 className="text-lg font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">
                 Item Image
               </h3>
-              <input
-                type="file"
-                name="image"
-                id="image"
-                onChange={handleImageChange}
-                accept="image/*"
-                multiple
-              />
+              <div className="flex items-end gap-4">
+                <label
+                  htmlFor="image"
+                  className="px-6 py-2 w-fit bg-(--color-secondary) text-white rounded-md hover:bg-(--color-secondary-hover) cursor-pointer transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  Add Image
+                </label>
+                <div className="flex flex-col">
+                  <span className="text-sm text-gray-600">
+                    (Upto 5 Images Allowed)
+                  </span>
+                  <span className="text-sm text-gray-600">
+                    (Max Size: 1MB each)
+                  </span>
+                </div>
+                <input
+                  type="file"
+                  name="image"
+                  id="image"
+                  onChange={handleImageChange}
+                  accept="image/*"
+                  className="hidden"
+                  multiple
+                />
+              </div>
+
+              {imagePreviews.length !== 0 && (
+                <div className="mt-3 grid grid-cols-5 gap-1">
+                  {imagePreviews.map((itemImg, idx) => (
+                    <div className="border rounded-md w-30 h-30 overflow-hidden "key={idx}>
+                      <img
+                        src={itemImg}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Basic Information Section */}
@@ -167,21 +240,21 @@ const AddMenuItemModal = ({ onClose }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Category *
+                    Serving Size *
                   </label>
                   <input
                     type="text"
-                    name="category"
-                    value={formData.category}
+                    name="servingSize"
+                    value={formData.servingSize}
                     onChange={handleInputChange}
                     className={`w-full border rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.category ? "border-red-500" : "border-gray-300"
+                      errors.servingSize ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="e.g., Main Course, Appetizer"
                   />
-                  {errors.category && (
+                  {errors.servingSize && (
                     <p className="text-red-600 text-xs mt-1">
-                      {errors.category}
+                      {errors.servingSize}
                     </p>
                   )}
                 </div>
@@ -279,7 +352,7 @@ const AddMenuItemModal = ({ onClose }) => {
             <div className="flex justify-end space-x-4 pt-6 border-t border-gray-300">
               <button
                 type="button"
-                onClick={() => onClose()}
+                onClick={handleClose}
                 disabled={loading}
                 className="px-6 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition disabled:opacity-50"
               >

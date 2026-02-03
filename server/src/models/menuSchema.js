@@ -7,7 +7,7 @@ const menuSchema = mongoose.Schema(
       ref: "User",
       required: true,
     },
-    dishName: {
+    itemName: {
       type: String,
       required: true,
     },
@@ -16,6 +16,10 @@ const menuSchema = mongoose.Schema(
       required: true,
     },
     servingSize: {
+      type: String,
+      required: true,
+    },
+    preparationTime: {
       type: String,
       required: true,
     },
