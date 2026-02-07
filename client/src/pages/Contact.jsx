@@ -139,7 +139,7 @@ const Contact = () => {
 
           <div className="bg-white rounded-2xl shadow-2xl p-6 flex flex-col gap-2 hover:shadow-lg transition">
             <h3 className="font-bold text-(--color-primary)">✉ Email</h3>
-            <p className="text-(--color-text)/80">support@cravings.com</p>
+            <p className="text-(--color-text)/80">gauravathode.devgmail.com</p>
           </div>
         </div>
       </div>
