@@ -67,6 +67,13 @@ const Header = () => {
               Contact
               <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-(--color-accent) group-hover:w-full transition-all"></span>
             </Link>
+            <Link
+            to={"/orderNowCopy"}
+            className="relative group px-2 py-1 hover:text-(--color-accent) transition"
+          >
+            Order Now
+            <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-(--color-accent) group-hover:w-full transition-all"></span>
+          </Link>
           </nav>
 
           {/* Buttons */}

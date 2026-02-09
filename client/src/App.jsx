@@ -13,6 +13,8 @@ import ResturantDashboard from "./pages/dashboards/ResturantDashboard";
 import AdminDashboard from "./pages/dashboards/AdminDashboard";
 import OrderNow from "./pages/OrderNow";
 import RestaurantDisplayMenu from "./pages/RestaurantDisplayMenu";
+import OrderNowCopy from "./pages/OrderNowcopy";
+import RestaurantDisplayMenuCopy from "./pages/RestaurantDisplayMenucopy";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
@@ -33,7 +35,13 @@ const App = () => {
           <Route path="/resturant-dashboard" element={<ResturantDashboard />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/order-now" element={<OrderNow />} />
+          <Route path="/orderNowCopy" element={<OrderNowCopy />} />
           <Route path="/restaurant/:id" element={<RestaurantDisplayMenu />} />
+          <Route
+            path="/restaurantMenuCopy"
+            element={<RestaurantDisplayMenuCopy />}
+          />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
