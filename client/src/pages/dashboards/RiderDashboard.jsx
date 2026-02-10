@@ -2,7 +2,9 @@ import React from 'react'
 
 const RiderDashboard = () => {
   return (
-    <div>RiderDashboard</div>
+    <>
+      <div>Rider Dashboard</div>
+    </>
   )
 }
 
