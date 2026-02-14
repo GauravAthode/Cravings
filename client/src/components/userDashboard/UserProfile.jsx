@@ -40,6 +40,7 @@ const UserProfile = () => {
       setPreview(newPhotoURL);
       setTimeout(() => {
         changePhoto(file);
+        
       }, 1000);
     }
   };

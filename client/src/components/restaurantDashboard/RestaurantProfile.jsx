@@ -20,6 +20,8 @@ const RestaurantProfile = () => {
     useState(false);
   const [preview, setPreview] = useState("");
 
+  
+
   const changePhoto = async (photo) => {
     const form_Data = new FormData();
     form_Data.append("image", photo);
@@ -42,9 +44,11 @@ const RestaurantProfile = () => {
       setPreview(newPhotoURL);
       setTimeout(() => {
         changePhoto(file);
+        console.log("chooooooo")
       }, 1000);
     }
   };
+  
 
   const renderField = (label, value) => (
     <div className="flex justify-between py-2 px-3 border-b border-gray-200 last:border-b-0">
