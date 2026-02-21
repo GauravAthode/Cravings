@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
-  const { user, isLogin,role } = useAuth();
+  const { user, isLogin, role } = useAuth();
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -18,7 +18,7 @@ const Header = () => {
         break;
       }
       case "customer": {
-        navigate("/user-dashboard");
+        navigate("/user-dashboard", { state: { tab: "overview" } });
         break;
       }
       case "admin": {
@@ -29,76 +29,65 @@ const Header = () => {
         break;
     }
   };
-  
 
   return (
-    <header className="bg-(--color-primary) sticky top-0 z-50 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to={"/"} className="flex items-center">
-            <img
-              src={tranparentLogo}
-              alt="Logo"
-              className="h-12 w-24 object-cover invert-100 transition-transform transform hover:scale-105"
-            />
+    <>
+      <div className="bg-(--color-primary) px-4 py-2 flex justify-between items-center">
+        <Link to={"/"}>
+          <img
+            src={tranparentLogo}
+            alt=""
+            className="h-12 w-20 object-cover invert-100"
+          />
+        </Link>
+        <div className="flex gap-4">
+          <Link
+            to={"/"}
+            className="text-decoration-none text-white hover:text-(--color-accent)"
+          >
+            Home
           </Link>
-
-          {/* Navigation */}
-          <nav className="hidden md:flex gap-6 text-white font-medium">
-            <Link
-              to={"/"}
-              className="relative group px-2 py-1 hover:text-(--color-accent) transition"
+          <Link
+            to={"/about"}
+            className="text-decoration-none text-white hover:text-(--color-accent)"
+          >
+            About
+          </Link>
+          <Link
+            to={"/contact"}
+            className="text-decoration-none text-white hover:text-(--color-accent)"
+          >
+            Contact
+          </Link>
+          
+        </div>
+        <div className="flex gap-4">
+          {isLogin ? (
+            <div
+              className="text-red-500 cursor-pointer"
+              onClick={handleNavigate}
             >
-              Home
-              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-(--color-accent) group-hover:w-full transition-all"></span>
-            </Link>
-            <Link
-              to={"/about"}
-              className="relative group px-2 py-1 hover:text-(--color-accent) transition"
-            >
-              About
-              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-(--color-accent) group-hover:w-full transition-all"></span>
-            </Link>
-            <Link
-              to={"/contact"}
-              className="relative group px-2 py-1 hover:text-(--color-accent) transition"
-            >
-              Contact
-              <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-(--color-accent) group-hover:w-full transition-all"></span>
-            </Link>
-            
-          </nav>
-
-          {/* Buttons */}
-          <div className="flex gap-4">
-            {isLogin ? (
-              <div
-                className="text-orange-500  hover:scale-110 cursor-pointer"
-                onClick={handleNavigate}
+              {user.fullName}
+            </div>
+          ) : (
+            <>
+              <button
+                onClick={() => navigate("/login")}
+                className="bg-(--color-secondary) py-2 px-4 font-bold hover:bg-(--color-secondary-hover) hover:text-white rounded "
               >
-                {user.fullName}
-              </div>
-            ) : (
-              <>
-                <button
-                  onClick={() => navigate("/login")}
-                  className="py-2 px-4 font-bold rounded-lg bg-(--color-secondary) hover:bg-(--color-secondary-hover) hover:scale-105 transition transform shadow-md text-white"
-                >
-                  Login
-                </button>
-                <button
-                  onClick={() => navigate("/register")}
-                  className="py-2 px-4 font-bold rounded-lg bg-(--color-secondary) hover:bg-(--color-secondary-hover) hover:scale-105 transition transform shadow-md text-white"
-                >
-                  Sign Up
-                </button>
-              </>
-            )}
-          </div>
+                Login
+              </button>
+              <button
+                onClick={() => navigate("/register")}
+                className="bg-(--color-secondary) py-2 px-4 font-bold hover:bg-(--color-secondary-hover) hover:text-white rounded "
+              >
+                Register
+              </button>
+            </>
+          )}
         </div>
       </div>
-    </header>
+    </>
   );
 };
 

@@ -93,15 +93,15 @@ const Home = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative bg-(--color-secondary) text-white py-20">
+      <section className="relative bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div className="">
             {/* Left Content */}
             <div className="space-y-6">
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-                Order Your Favorite Food
+              <h1 className="text-base sm:text-xl md:text-3xl lg:text-5xl xl:text-7xl font-bold leading-tight">
+                Feed Your Craving, Anytime
               </h1>
-              <p className="text-lg md:text-xl text-orange-50">
+              <p className="text-xs sm:text-md md:text-lg  lg:text-2xl xl:text-4xl text-orange-50">
                 Discover delicious meals from the best restaurants in your area.
                 Fast delivery, great quality, amazing taste!
               </p>
@@ -136,11 +136,6 @@ const Home = () => {
                 </div>
               </div>
             </div>
-
-            {/* Right Visual */}
-            <div className="flex justify-center items-center">
-              <div className="text-8xl animate-bounce">🍽️</div>
-            </div>
           </div>
         </div>
       </section>
@@ -163,7 +158,7 @@ const Home = () => {
                 key={restaurant.id}
                 className="bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300 overflow-hidden cursor-pointer transform hover:scale-105"
               >
-                <div className="h-40 bg-(--color-secondary) flex items-center justify-center">
+                <div className="h-40 bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center">
                   <span className="text-6xl">{restaurant.image}</span>
                 </div>
                 <div className="p-4">
@@ -209,7 +204,7 @@ const Home = () => {
                 key={dish.id}
                 className="bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300 overflow-hidden cursor-pointer"
               >
-                <div className="h-48 bg-(--color-secondary) flex items-center justify-center">
+                <div className="h-48 bg-gradient-to-br from-orange-300 to-orange-400 flex items-center justify-center">
                   <span className="text-8xl">{dish.image}</span>
                 </div>
                 <div className="p-4">
@@ -290,7 +285,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-(--color-secondary) text-white">
+      <section className="py-16 bg-gradient-to-r from-orange-500 to-orange-600 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Ready to Order?
