@@ -1,7 +1,12 @@
 import Order from "../models/orderModel.js";
+import { calculateDistance } from "../utils/riderUtility.js";
 
 export const RiderGetAvailableOrder = async (req, res, next) => {
   try {
+    //console.log("RiderGetAvailableOrder called with body: ", req.body);
+    const { lat, lon } = req.body;
+    // console.log("Latitude: ", lat, "Longitude: ", lon);
+
     const availableOrders = await Order.find({
       riderId: null,
       status: {
@@ -14,9 +19,19 @@ export const RiderGetAvailableOrder = async (req, res, next) => {
       .populate("userId")
       .populate("restaurantId");
 
+    // console.log("Available Orders before distance calculation: ", availableOrders);
+
+    const AvailableOrdersWithDistance = await calculateDistance(
+      availableOrders,
+      lat,
+      lon,
+    );
+
+    // console.log("Available Orders With Distance: ", AvailableOrdersWithDistance);
+
     res.status(200).json({
       message: "Available Orders Fetched Successfully",
-      data: availableOrders,
+      data: AvailableOrdersWithDistance,
     });
   } catch (error) {
     next(error);
@@ -35,11 +50,6 @@ export const RiderGetOngoingOrder = async (req, res, next) => {
       .populate("userId")
       .populate("restaurantId");
 
-    // if (ongoingOrders.length === 0) {
-    //   const error = new Error("No Ongoing Orders Found");
-    //   error.status = 404;
-    //   return next(error);
-    // }
     res.status(200).json({
       message: "Ongoing Orders Fetched Successfully",
       data: ongoingOrders,
@@ -65,6 +75,29 @@ export const RiderGetCompletedOrder = async (req, res, next) => {
       message: "Completed Orders Fetched Successfully",
       data: completedOrders,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const RiderAcceptOrder = async (req, res, next) => {
+  try {
+    const riderId = req.user._id;
+
+    const orderID = req.params.id;
+
+    const currentOrder = await Order.findById(orderID);
+
+    if (!currentOrder) {
+      const error = new Error("Order Not Found");
+      error.statusCode = 404;
+      return next(error);
+    }
+
+    currentOrder.riderId = riderId;
+    await currentOrder.save();
+
+    res.status(200).json({ message: "Order Assingned to you" });
   } catch (error) {
     next(error);
   }
