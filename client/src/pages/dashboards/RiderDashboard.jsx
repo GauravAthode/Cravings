@@ -57,6 +57,7 @@ const RiderDashboard = () => {
         </div>
       </div>
     </>
+    
   );
 };
 
