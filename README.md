@@ -24,8 +24,6 @@ A full-stack food delivery application built with React, Express, and MongoDB. T
 - **Rider**: Accept delivery orders, track deliveries (structure in place)
 - **Admin**: Manage the platform, view analytics, manage users (structure in place)
 
-**Base URL**: `http://localhost:5000` (Backend) | `http://localhost:5173` (Frontend)
-
 ---
 
 ## ✨ Available Features
