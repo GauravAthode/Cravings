@@ -47,7 +47,6 @@ const Login = () => {
         case "partner":
           setRole("partner");
           navigate("/rider-dashboard");
-          
           break;
         case "customer":
           setRole("customer");
