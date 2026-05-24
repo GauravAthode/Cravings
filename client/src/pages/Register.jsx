@@ -94,7 +94,7 @@ const Register = () => {
           Create Account
         </h2>
         <p className="text-center text-(--color-text)/70 mt-2 mb-8">
-          Sign up to start ordering your favorite food
+          Sign to Start Ordering you food
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
