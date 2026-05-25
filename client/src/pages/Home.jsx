@@ -49,6 +49,7 @@ const Home = () => {
       image: "🍛",
     },
 
+    
     {
       id: 2,
       name: "Margherita Pizza",
